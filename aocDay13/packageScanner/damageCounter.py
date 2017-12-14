@@ -37,6 +37,16 @@ def find_location_cost(maxDepth, moves):
             cost = moves * maxDepth
     return cost
 
+def find_total_cost(wallDict, picoNum):
+    step = 0
+    totalCost = 0
+    while step < picoNum:
+        if not wallDict[step] == None:
+            currentDepth = int(wallDict[step])
+            totalCost += find_location_cost(currentDepth,step)
+        step += 1
+    return totalCost
+
 if __name__ == '__main__':
     fileName = "../firewalls.txt"
     

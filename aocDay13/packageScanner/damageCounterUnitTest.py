@@ -10,7 +10,7 @@ from damageCounter import find_location_cost
 class Test(unittest.TestCase):
 
 
-    def testFindScanLocation(self):
+    def testFindLocationCost(self):
         assert(find_location_cost(3, 0) == 0)
         assert(find_location_cost(4, 4) == 0)
         assert(find_location_cost(4, 6) == 24)
@@ -18,6 +18,9 @@ class Test(unittest.TestCase):
         assert(find_location_cost(8, 52) == 0)
         pass
 
+    def testFindTotalCost(self):
+        
+        pass
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
