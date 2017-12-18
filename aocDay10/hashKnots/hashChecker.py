@@ -57,6 +57,8 @@ def hash_checker(inputString):
 
 if __name__ == '__main__':
     baseLengthsChars = "94,84,0,79,2,27,81,1,123,93,218,23,103,255,254,243"
+    testHash = "102,108,113,114,103,110,107,120,045,048"
     hash_checker(baseLengthsChars)
+#     hash_checker(testHash)
     
     pass
