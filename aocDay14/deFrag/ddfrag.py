@@ -5,6 +5,7 @@ Created on Dec 16, 2017
 '''
 
 from hashKnots.hashChecker import hash_checker
+import sys
 
 def asciiToDecimal(textString):
     asciiNumString = ""
@@ -220,6 +221,138 @@ def total_used_cells(baseKey):
         stringRows.append(row)
         arrayRows.append(arrRow)
     return grandTotal, stringRows, arrayRows
+
+def updateEast(matrix, xCoord, yCoord, currentGroup):
+    myValue = matrix[xCoord][yCoord]
+    if myValue == '0':
+        return True
+    if not myValue == '1':
+        return False
+    matrix[xCoord][yCoord] = str(currentGroup)
+    if yCoord > 0:
+        northDone = updateNorth(matrix, xCoord, yCoord - 1, currentGroup)
+    else:
+        northDone = True
+    if xCoord < 127:
+        eastDone = updateEast(matrix, xCoord + 1, yCoord, currentGroup)
+    else:
+        eastDone = True
+    if yCoord < 127:
+        southDone = updateSouth(matrix, xCoord, yCoord + 1, currentGroup)
+    else:
+        southDone = True
+    return northDone and eastDone and southDone
+
+def updateWest(matrix, xCoord, yCoord, currentGroup):
+    myValue = matrix[xCoord][yCoord]
+    if myValue == '0':
+        return True
+    if not myValue == '1':
+        return False
+    matrix[xCoord][yCoord] = str(currentGroup)
+    if yCoord > 0:
+        northDone = updateNorth(matrix, xCoord, yCoord - 1, currentGroup)
+    else:
+        northDone = True
+    if xCoord > 0:
+        westDone = updateWest(matrix, xCoord - 1, yCoord, currentGroup)
+    else:
+        westDone = True
+    if yCoord < 127:
+        southDone = updateSouth(matrix, xCoord, yCoord + 1, currentGroup)
+    else:
+        southDone = True
+    return northDone and westDone and southDone
+
+def updateSouth(matrix, xCoord, yCoord, currentGroup):
+    myValue = matrix[xCoord][yCoord]
+    if myValue == '0':
+        return True
+    if not myValue == '1':
+        return False
+    matrix[xCoord][yCoord] = str(currentGroup)
+    if xCoord > 0:
+        westDone = updateWest(matrix, xCoord - 1, yCoord, currentGroup)
+    else:
+        westDone = True
+    if xCoord < 127:
+        eastDone = updateEast(matrix, xCoord + 1, yCoord, currentGroup)
+    else:
+        eastDone = True
+    if yCoord < 127:
+        southDone = updateSouth(matrix, xCoord, yCoord + 1, currentGroup)
+    else:
+        southDone = True
+    return westDone and eastDone and southDone
+
+def updateNorth(matrix, xCoord, yCoord, currentGroup):
+    myValue = matrix[xCoord][yCoord]
+    if myValue == '0':
+        return True
+    if not myValue == '1':
+        return False
+    matrix[xCoord][yCoord] = str(currentGroup)
+    if yCoord > 0:
+        northDone = updateNorth(matrix, xCoord, yCoord - 1, currentGroup)
+    else:
+        northDone = True
+    if xCoord < 127:
+        eastDone = updateEast(matrix, xCoord + 1, yCoord, currentGroup)
+    else:
+        eastDone = True
+    if xCoord > 0:
+        westDone = updateWest(matrix, xCoord - 1, yCoord, currentGroup)
+    else:
+        westDone = True
+    return northDone and eastDone and westDone
+
+def viralWalker(matrix):
+    xLocation = 0
+    yLocation = 0
+    currentGroup = 1
+    
+    eastDone = updateEast(matrix, xLocation + 1, yLocation, currentGroup) 
+    southDone = updateSouth(matrix, xLocation, yLocation - 1, currentGroup)
+    if not (eastDone and southDone):
+        return False
+    
+    xLocation += 1
+    currentGroup += 1
+    
+    while (xLocation < 128 and yLocation < 128):
+        currentValue = matrix[xLocation][yLocation]
+        
+#         Walk past 0s and groups
+        if not currentValue == '1':
+            if xLocation < 127:
+                xLocation += 1
+                continue
+            elif yLocation < 127:
+                xLocation = 0
+                yLocation += 1
+                continue
+            else:
+                break
+        
+#         Found a 1 hopefully
+        if xLocation < 127:
+            eastDone = updateEast(matrix, xLocation, yLocation, currentGroup)
+        if yLocation < 127:
+            southDone = updateSouth(matrix, xLocation, yLocation, currentGroup)
+            
+        if eastDone and southDone:
+            if xLocation < 127:
+                xLocation += 1
+                currentGroup += 1
+                continue
+            elif yLocation < 127:
+                xLocation = 0
+                yLocation += 1
+                currentGroup += 1
+                continue
+            else:
+                break
+    return (eastDone and southDone), currentGroup
 
 if __name__ == '__main__':
         

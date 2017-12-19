@@ -5,8 +5,9 @@ Created on Dec 16, 2017
 '''
 import unittest
 from deFrag.ddfrag import asciiToDecimal, hex_to_bin, update_first_row,\
-    convert_to_groups, total_used_cells, compare_with_above
+    convert_to_groups, total_used_cells, compare_with_above, viralWalker
 from hashKnots.hashChecker import hash_checker
+from numpy.core.numeric import full
 
 class Test(unittest.TestCase):
 
@@ -128,6 +129,17 @@ class Test(unittest.TestCase):
         else:
             print("I'm smoking crack")
             
+    def testViralWalker(self):
+        fullMatrix = []
+        testKey = "flqrgnkx-"
+        for i in range(128):
+            currentKey = testKey + str(i)
+            knotHash = hash_checker(currentKey)
+            hashInBin,hashArray = hex_to_bin(knotHash)
+            fullMatrix.append(hashArray)
+        successfullRun, totalGroups = viralWalker(fullMatrix)
+        print("total groups: " + str(totalGroups))
+        pass
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testHexToBin']
